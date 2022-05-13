@@ -1,266 +1,446 @@
-! function r(e, t, n) {
-    function i(o, f) {
-        if (!t[o]) {
-            if (!e[o]) {
-                var u = "function" == typeof require && require;
-                if (!f && u) return u(o, !0);
-                if (a) return a(o, !0);
-                var l = new Error("Cannot find module '" + o + "'");
-                throw l.code = "MODULE_NOT_FOUND", l
+/* 
+
+COMBINATIONS
+
+*/
+var Combinations = function() {
+    var win = [[1, 1, 1, 1, 1]];
+    var unCovered4 = [[0, 1, 1, 1, 1, 0]];
+    var unCovered3 = [
+        [0, 1, 1, 1, 0, 0], [0, 0, 1, 1, 1, 0],
+        [0, 1, 0, 1, 1, 0], [0, 1, 1, 0, 1, 0]
+    ];
+    var unCovered2 = [
+        [0, 0, 1, 1, 0, 0], [0, 1, 0, 1, 0, 0],
+        [0, 0, 1, 0, 1, 0], [0, 1, 1, 0, 0, 0],
+        [0, 0, 0, 1, 1, 0], [0, 1, 0, 0, 1, 0]
+    ];
+    var covered4 = [
+        [-1, 1, 0, 1, 1, 1], [-1, 1, 1, 0, 1, 1],
+        [-1, 1, 1, 1, 0, 1], [-1, 1, 1, 1, 1, 0],
+        [0, 1, 1, 1, 1, -1], [1, 0, 1, 1, 1, -1],
+        [1, 1, 0, 1, 1, -1], [1, 1, 1, 0, 1, -1]
+    ];
+    var covered3 = [
+        [-1, 1, 1, 1, 0, 0], [-1, 1, 1, 0, 1, 0],
+        [-1, 1, 0, 1, 1, 0], [0, 0, 1, 1, 1, -1],
+        [0, 1, 0, 1, 1, -1], [0, 1, 1, 0, 1, -1],
+        [-1, 1, 0, 1, 0, 1, -1], [-1, 0, 1, 1, 1, 0, -1],
+        [-1, 1, 1, 0, 0, 1, -1], [-1, 1, 0, 0, 1, 1, -1]
+    ];
+  
+    (function() { //add same combinations for another player
+        var allCombos = [win, unCovered4, unCovered3, unCovered2, covered4, covered3];
+        for (var k = 0; k < allCombos.length; k++) {
+            var temp = [];
+            for (var j = 0; j < allCombos[k].length; j++) {
+                var tmp = [];
+                for (var i = 0; i < allCombos[k][j].length; i++)
+                    tmp[i] = -allCombos[k][j][i];
+                temp.push(tmp);
             }
-            var s = t[o] = {
-                exports: {}
-            };
-            e[o][0].call(s.exports, function(r) {
-                var t = e[o][1][r];
-                return i(t ? t : r)
-            }, s, s.exports, r, e, t, n)
+            for (var m = 0; m < temp.length; m++) {
+                allCombos[k].push(temp[m]);
+            }
         }
-        return t[o].exports
+    }());
+  
+    var valueCombo = function(w, u2, u3, u4, c3, c4) {
+        if (w > 0)            return 1000000000;
+        if (u4 > 0)           return 100000000;
+        if (c4 > 1)           return 10000000;
+        if (u3 > 0 && c4 > 0) return 1000000;
+        if (u3 > 1)           return 100000;
+  
+        if (u3 == 1) {
+            if (u2 == 3)        return 40000;
+            if (u2 == 2)        return 38000;
+            if (u2 == 1)        return 35000;
+            return 3450;
+        }
+  
+        if (c4 == 1) {
+            if (u2 == 3)        return 4500;
+            if (u2 == 2)        return 4200;
+            if (u2 == 1)        return 4100;
+            return 4050;
+        }
+    
+        if (c3 == 1) {
+            if (u2 == 3)        return 3400;
+            if (u2 == 2)        return 3300;
+            if (u2 == 1)        return 3100;
+        }
+  
+        if (c3 == 2) {
+            if (u2 == 2)        return 3000;
+            if (u2 == 1)        return 2900;
+        }
+    
+        if (c3 == 3) {
+            if (u2 == 1)        return 2800;
+        }
+    
+        if (u2 == 4)          return 2700;
+        if (u2 == 3)          return 2500;
+        if (u2 == 2)          return 2000;
+        if (u2 == 1)          return 1000;
+        return 0;
+    };
+  
+    var findArray = function(arr, inArr){
+        var fCount = arr.length;
+        var sCount = inArr.length;
+        var k;
+        for (var i = 0; i <= fCount - sCount; i++)
+        {
+            k = 0;
+            for (var j = 0; j < sCount; j++)
+            {
+                if (arr[i + j] == inArr[j]) k++;
+                else break;
+            }
+            if (k == sCount) return true;
+        }
+        return false;
+    };
+  
+    var isAnyInArrays = function(combos, arr){
+        for (var i = 0; i < combos.length; i++) {
+            if (findArray(arr, combos[i])) return true;
+        }
+        return false;
+    };
+  
+    var combinations = {};
+    combinations.winValue = 1000000000;
+    combinations.valuePosition = function(arr1,  arr2,  arr3,  arr4){ // 4 directions
+        var w = 0, u2 = 0, u3 = 0, u4 = 0, c3 = 0, c4 = 0;
+        var allArr = [arr1,  arr2,  arr3,  arr4];
+        for (var i = 0; i < allArr.length; i++) {
+            if (isAnyInArrays(win, allArr[i])) {
+                w++;
+                continue;
+            }
+            if (isAnyInArrays(covered4, allArr[i])) {
+                c4++;
+                continue;
+            }
+            if (isAnyInArrays(covered3, allArr[i])) {
+                c3++;
+                continue;
+            }
+            if (isAnyInArrays(unCovered4, allArr[i])) {
+                u4++;
+                continue;
+            }
+            if (isAnyInArrays(unCovered3, allArr[i])) {
+                u3++;
+                continue;
+            }
+            if (isAnyInArrays(unCovered2, allArr[i])) {
+                u2++;
+            }
+        }
+        return valueCombo(w, u2, u3, u4, c3, c4);
+    };
+    return combinations;
+};
+
+
+
+
+
+
+
+
+
+
+/*
+ 
+LOGIC
+
+*/
+
+
+
+Array.matrix = function(m,n,initial) {
+    var a, i, j, mat = [];
+    for (i = 0; i < m; i++) {
+        a = [];
+        for (j = 0; j < n; j++) {
+            a[j] = initial;
+        }
+        mat[i] = a;
     }
-    for (var a = "function" == typeof require && require, o = 0; o < n.length; o++) i(n[o]);
-    return i
-}({
-    1: [function(r, e, t) {
-        e.exports = function() {
-            var r = [
-                    [1, 1, 1, 1, 1]
-                ],
-                e = [
-                    [0, 1, 1, 1, 1, 0]
-                ],
-                t = [
-                    [0, 1, 1, 1, 0, 0],
-                    [0, 0, 1, 1, 1, 0],
-                    [0, 1, 0, 1, 1, 0],
-                    [0, 1, 1, 0, 1, 0]
-                ],
-                n = [
-                    [0, 0, 1, 1, 0, 0],
-                    [0, 1, 0, 1, 0, 0],
-                    [0, 0, 1, 0, 1, 0],
-                    [0, 1, 1, 0, 0, 0],
-                    [0, 0, 0, 1, 1, 0],
-                    [0, 1, 0, 0, 1, 0]
-                ],
-                i = [
-                    [-1, 1, 0, 1, 1, 1],
-                    [-1, 1, 1, 0, 1, 1],
-                    [-1, 1, 1, 1, 0, 1],
-                    [-1, 1, 1, 1, 1, 0],
-                    [0, 1, 1, 1, 1, -1],
-                    [1, 0, 1, 1, 1, -1],
-                    [1, 1, 0, 1, 1, -1],
-                    [1, 1, 1, 0, 1, -1]
-                ],
-                a = [
-                    [-1, 1, 1, 1, 0, 0],
-                    [-1, 1, 1, 0, 1, 0],
-                    [-1, 1, 0, 1, 1, 0],
-                    [0, 0, 1, 1, 1, -1],
-                    [0, 1, 0, 1, 1, -1],
-                    [0, 1, 1, 0, 1, -1],
-                    [-1, 1, 0, 1, 0, 1, -1],
-                    [-1, 0, 1, 1, 1, 0, -1],
-                    [-1, 1, 1, 0, 0, 1, -1],
-                    [-1, 1, 0, 0, 1, 1, -1]
-                ];
-            ! function() {
-                for (var o = [r, e, t, n, i, a], f = 0; f < o.length; f++) {
-                    for (var u = [], l = 0; l < o[f].length; l++) {
-                        for (var s = [], h = 0; h < o[f][l].length; h++) s[h] = -o[f][l][h];
-                        u.push(s)
-                    }
-                    for (var v = 0; v < u.length; v++) o[f].push(u[v])
-                }
-            }();
-            var o = function(r, e, t, n, i, a) {
-                    if (r > 0) return 1e9;
-                    if (n > 0) return 1e8;
-                    if (a > 1) return 1e7;
-                    if (t > 0 && a > 0) return 1e6;
-                    if (t > 1) return 1e5;
-                    if (1 == t) return 3 == e ? 4e4 : 2 == e ? 38e3 : 1 == e ? 35e3 : 3450;
-                    if (1 == a) return 3 == e ? 4500 : 2 == e ? 4200 : 1 == e ? 4100 : 4050;
-                    if (1 == i) {
-                        if (3 == e) return 3400;
-                        if (2 == e) return 3300;
-                        if (1 == e) return 3100
-                    }
-                    if (2 == i) {
-                        if (2 == e) return 3e3;
-                        if (1 == e) return 2900
-                    }
-                    return 3 == i && 1 == e ? 2800 : 4 == e ? 2700 : 3 == e ? 2500 : 2 == e ? 2e3 : 1 == e ? 1e3 : 0
-                },
-                f = function(r, e) {
-                    for (var t, n = r.length, i = e.length, a = 0; n - i >= a; a++) {
-                        t = 0;
-                        for (var o = 0; i > o && r[a + o] == e[o]; o++) t++;
-                        if (t == i) return !0
-                    }
-                    return !1
-                },
-                u = function(r, e) {
-                    for (var t = 0; t < r.length; t++)
-                        if (f(e, r[t])) return !0;
-                    return !1
-                },
-                l = {};
-            return l.winValue = 1e9, l.valuePosition = function(f, l, s, h) {
-                for (var v = 0, c = 0, d = 0, g = 0, C = 0, w = 0, p = [f, l, s, h], b = 0; b < p.length; b++) u(r, p[b]) ? v++ : u(i, p[b]) ? w++ : u(a, p[b]) ? C++ : u(e, p[b]) ? g++ : u(t, p[b]) ? d++ : u(n, p[b]) && c++;
-                return o(v, c, d, g, C, w)
-            }, l
+    return mat;
+};
+  
+var initCombinations = new Combinations();
+  
+var Logic = function(player) {
+    var gameSize = 5; // 5 in line
+    var ring = 1; // ring size around current cells
+    var win = false;
+    var cellsCount = 15;
+    var curState = Array.matrix(15, 15, 0);
+    var complexity = 1;
+    var maxPlayer = player || -1; // X = 1, O = -1
+    var combinations = initCombinations;
+    if (maxPlayer === -1) curState[7][7] = 1;
+  
+    var checkWin = function() {
+        for (var i = 0; i < cellsCount; i++) {
+            for (var j = 0; j < cellsCount; j++) {
+            if (curState[i][j] == 0) continue;
+            var playerVal = combinations.valuePosition(
+                getCombo(curState, curState[i][j], i, j, 1, 0),
+                getCombo(curState, curState[i][j], i, j, 0, 1),
+                getCombo(curState, curState[i][j], i, j, 1, 1),
+                getCombo(curState, curState[i][j], i, j, 1, -1)
+            );
+            if (playerVal === combinations.winValue) {
+                win = true;
+            }
+            }
         }
-    }, {}],
-    2: [function(r, e, t) {
-        Array.matrix = function(r, e, t) {
-            var n, i, a, o = [];
-            for (i = 0; r > i; i++) {
-                for (n = [], a = 0; e > a; a++) n[a] = t;
-                o[i] = n
-            }
-            return o
-        };
-        var n = r("./combinations");
-        e.exports = function(r) {
-            var e = 5,
-                t = 1,
-                i = !1,
-                a = 15,
-                o = Array.matrix(15, 15, 0),
-                f = r || -1,
-                u = n(); - 1 === f && (o[7][7] = 1);
-            var l = function() {
-                    for (var r = 0; a > r; r++)
-                        for (var e = 0; a > e; e++)
-                            if (0 != o[r][e]) {
-                                var t = u.valuePosition(c(o, o[r][e], r, e, 1, 0), c(o, o[r][e], r, e, 0, 1), c(o, o[r][e], r, e, 1, 1), c(o, o[r][e], r, e, 1, -1));
-                                t === u.winValue && (i = !0)
-                            }
-                },
-                s = function C(r, e, t, n) {
-                    if (0 == e) return d(r, n);
-                    for (var i = Number.MIN_VALUE, a = v(r, t), o = 0; o < a.length; o++) i = Math.max(i, -C(a[o], e - 1, -t, r));
-                    return i
-                },
-                h = function(r, e, t) {
-                    for (var n = 0, i = 0; i < r.length; i++)(e != r[i][0] || t != r[i][1]) && n++;
-                    return n == r.length
-                },
-                v = function(r, e) {
-                    for (var n = [], i = [], o = 0; a > o; o++)
-                        for (var f = 0; a > f; f++)
-                            if (0 != r[o][f])
-                                for (var u = o - t; o + t >= u; u++)
-                                    for (var l = f - t; f + t >= l; l++)
-                                        if (u >= 0 && l >= 0 && a > u && a > l && 0 == r[u][l]) {
-                                            var s = [u, l],
-                                                v = h(i, s[0], s[1]);
-                                            v && i.push(s)
-                                        } for (var c = 0; c < i.length; c++) {
-                        for (var d = Array.matrix(a, a, 0), g = 0; a > g; g++)
-                            for (var C = 0; a > C; C++) d[g][C] = r[g][C];
-                        d[i[c][0]][i[c][1]] = -e, n.push(d)
-                    }
-                    return n
-                },
-                c = function(r, t, n, i, o, f) {
-                    for (var u = [t], l = 1; e > l; l++) {
-                        var s = n - o * l,
-                            h = i - f * l;
-                        if (s >= a || h >= a || 0 > s || 0 > h) break;
-                        var v = r[s][h];
-                        if (r[s][h] == -t) {
-                            u.unshift(v);
-                            break
-                        }
-                        u.unshift(v)
-                    }
-                    for (var c = 1; e > c; c++) {
-                        var d = n + o * c,
-                            g = i + f * c;
-                        if (d >= a || g >= a || 0 > d || 0 > g) break;
-                        var C = r[d][g];
-                        if (C == -t) {
-                            u.push(C);
-                            break
-                        }
-                        u.push(C)
-                    }
-                    return u
-                },
-                d = function(r, e) {
-                    for (var t = 0; a > t; t++)
-                        for (var n = 0; a > n; n++)
-                            if (r[t][n] != e[t][n]) {
-                                var i = r[t][n],
-                                    o = u.valuePosition(c(r, i, t, n, 1, 0), c(r, i, t, n, 0, 1), c(r, i, t, n, 1, 1), c(r, i, t, n, 1, -1));
-                                r[t][n] = -i;
-                                var f = u.valuePosition(c(r, -i, t, n, 1, 0), c(r, -i, t, n, 0, 1), c(r, -i, t, n, 1, 1), c(r, -i, t, n, 1, -1));
-                                return r[t][n] = -i, 2 * o + f
-                            } return 0
-                },
-                g = {};
-            return g.winState = "", g.makeAnswer = function(r, e) {
-                var t = this;
-                if (o[r][e] = f, l(), i) return t.winState = "you win", "";
-                for (var n = [-1, -1], u = v(o, f), h = -1, c = Number.MIN_VALUE, d = 0; d < u.length; d++) {
-                    var g = s(u[d], 0, -f, o);
-                    g > c && (c = g, h = d)
-                }
-                for (var C = 0; a > C; C++)
-                    for (var w = 0; a > w; w++)
-                        if (u[h][C][w] != o[C][w]) return n[0] = C, n[1] = w, o[n[0]][n[1]] = -f, l(), i && (t.winState = "you lost"), n;
-                return n
-            }, g
+    };
+  
+    var miniMax = function minimax(node, depth, player, parent) {
+        if (depth == 0) return heuristic(node, parent);
+        var alpha = Number.MIN_VALUE;
+        var childs = getChilds(node, player);
+        for (var i = 0; i < childs.length; i++) {
+            alpha = Math.max(alpha, -minimax(childs[i], depth - 1, -player, node));
         }
-    }, {
-        "./combinations": 1
-    }],
-    3: [function(r, e, t) {
-        $(document).ready(function() {
-            function e(r) {
-                function e() {
-                    return o *= -1, 1 === o ? "boardCellCross" : "boardCellCircle"
+        return alpha;
+    };
+  
+    var isAllSatisfy = function (candidates, pointX, pointY) {
+        var counter = 0;
+        for (var i = 0; i < candidates.length; i++) {
+            if (pointX != candidates[i][0] || pointY != candidates[i][1]) counter++;
+        }
+        return counter == candidates.length;
+    };
+  
+    var getChilds = function(parent, player) {
+        var children = [];
+        var candidates = [];
+        for (var i = 0; i < cellsCount; i++) {
+            for (var j = 0; j < cellsCount; j++) {
+            if (parent[i][j] != 0) {
+                for (var k = i - ring; k <= i + ring; k++) {
+                for (var l = j - ring; l <= j + ring; l++) {
+                    if (k >= 0 && l >= 0 && k < cellsCount && l < cellsCount) {
+                        if (parent[k][l] == 0) {
+                            var curPoint = [k, l];
+                            var flag = isAllSatisfy(candidates, curPoint[0], curPoint[1]);
+                            if (flag) candidates.push(curPoint);
+                        }
+                    }
                 }
-                if (f) return "";
-                var t = $(this);
-                if (t.children().hasClass("boardCellCircle")) return "";
-                if (t.children().hasClass("boardCellCross")) return "";
-                var n = t.children().attr("id").split("-"),
-                    i = a.makeAnswer(n[0], n[1]);
-                if ("" !== i) {
-                    var u = "#" + i[0] + "-" + i[1];
-                    $(u).addClass(e())
-                } else o *= -1;
-                if (t.children().addClass(e()), "" !== a.winState) {
-                    var l = $("#message");
-                    l.text(a.winState), f = !0, l.removeClass("looseState"), "you lost" === a.winState && l.addClass("looseState")
                 }
             }
-
-            function t(r) {
-                var e = 100,
-                    t = 300,
-                    n = $(this).attr("id").split("-")[1],
-                    i = $(".board"),
-                    a = $(".controls");
-                "Up" === n && (i.width(i.width() + e), i.height(i.height() + e), a.width(a.width() + e), a.height(a.height() + e / 15)), "Down" === n && i.width() > t && (i.width(i.width() - e), i.height(i.height() - e), a.width(a.width() - e), a.height(a.height() - e / 15))
             }
-
-            function n(r) {
-                var e = $(this).children().attr("id").split("-")[1];
-                $(".boardCell").removeClass("boardCellCross boardCellCircle"), f = !1, $("#message").text(""), "O" === e && (a = i(), $("#7-7").addClass("boardCellCross"), o = -1), "X" === e && (a = i(1), o = 1), $("#check").prop("checked", !1)
+        }
+        for (var f = 0; f < candidates.length; f++) {
+            var tmp = Array.matrix(cellsCount, cellsCount, 0);
+            for (var m = 0; m < cellsCount; m++) {
+                for (var n = 0; n < cellsCount; n++) {
+                    tmp[m][n] = parent[m][n];
+                }
             }
-            var i = r("./gomoku/logic"),
-                a = i();
+            tmp[candidates[f][0]][candidates[f][1]] = -player;
+            children.push(tmp);
+        }
+        return children;
+    };
+  
+    var getCombo = function(node, curPlayer, i, j, dx, dy) {
+        var combo = [curPlayer];
+        for (var m = 1; m < gameSize; m++) {
+            var nextX1 = i - dx * m;
+            var nextY1 = j - dy * m;
+            if (nextX1 >= cellsCount || nextY1 >= cellsCount || nextX1 < 0 || nextY1 < 0) break;
+            var next1 = node[nextX1][nextY1];
+            if (node[nextX1][nextY1] == -curPlayer) {
+                combo.unshift(next1);
+                break;
+            }
+            combo.unshift(next1);
+        }
+        for (var k = 1; k < gameSize; k++) {
+            var nextX = i + dx * k;
+            var nextY = j + dy * k;
+            if (nextX >= cellsCount || nextY >= cellsCount || nextX < 0 || nextY < 0) break;
+            var next = node[nextX][nextY];
+            if (next == -curPlayer) {
+                combo.push(next);
+                break;
+            }
+            combo.push(next);
+        }
+        return combo;
+    };
+  
+    var heuristic = function(newNode, oldNode) {
+        for (var i = 0; i < cellsCount; i++) {
+            for (var j = 0; j < cellsCount; j++) {
+                if (newNode[i][j] != oldNode[i][j]) {
+                    var curCell = newNode[i][j];
+                    var playerVal = combinations.valuePosition(
+                        getCombo(newNode, curCell, i, j, 1, 0),
+                        getCombo(newNode, curCell, i, j, 0, 1),
+                        getCombo(newNode, curCell, i, j, 1, 1),
+                        getCombo(newNode, curCell, i, j, 1, -1)
+                    );
+                    newNode[i][j] = -curCell;
+                    var oppositeVal = combinations.valuePosition(
+                        getCombo(newNode, -curCell, i, j, 1, 0),
+                        getCombo(newNode, -curCell, i, j, 0, 1),
+                        getCombo(newNode, -curCell, i, j, 1, 1),
+                        getCombo(newNode, -curCell, i, j, 1, -1)
+                    );
+                    newNode[i][j] = -curCell;
+                    return 2 * playerVal + oppositeVal;
+                }
+            }
+        }
+        return 0;
+    };
+  
+    var getLogic = {};
+    getLogic.winState = "";
+    getLogic.makeAnswer = function(x, y) {
+        var that = this;
+        curState[x][y] = maxPlayer;
+        checkWin();
+        if (win){
+            that.winState = "you win";
+            return "";
+        }
+        var answ = [-1, -1];
+        var c = getChilds(curState, maxPlayer);
+        var maxChild = -1;
+        var maxValue = Number.MIN_VALUE;
+        for (var k = 0; k < c.length; k++) {
+            var curValue = miniMax(c[k], 0, -maxPlayer, curState);
+            if (complexity > 1) {
+            //var curValue2 = miniMax(c[k], complexity - 1, -maxPlayer, curState);
+            //use it for more complex game!
+            }
+            if (maxValue < curValue) {
+                maxValue = curValue;
+                maxChild = k;
+            }
+        }
+        for (var i = 0; i < cellsCount; i++) {
+            for (var j = 0; j < cellsCount; j++) {
+                if (c[maxChild][i][j] != curState[i][j]) {
+                    answ[0] = i;
+                    answ[1] = j;
+                    curState[answ[0]][answ[1]] = -maxPlayer;
+                    checkWin();
+                    if (win) {
+                        that.winState = "you lost";
+                    }
+                    return answ;
+                }
+            }
+        }
+        return answ;
+    };
+    return getLogic;
+};
+
+
+
+
+/* 
+
+MAIN
+
+*/
+
+
+$(document).ready(function(){
+    var initLogic = new Logic();
+    var logic = initLogic;
+  
+    $("#7-7").addClass("boardCellCross");
+    var currValue = -1; // player - O, computer - X
+    var gameOver = false;
+  
+    $('div.boardCol').mousedown(handleMouseDown);
+    function handleMouseDown(e){
+        if(gameOver) return "";
+        var cell = $(this);
+        if (cell.children().hasClass("boardCellCircle")) return "";
+        if (cell.children().hasClass("boardCellCross")) return "";
+        var indexes = (cell.children().attr('id')).split("-");
+        var answer = logic.makeAnswer(indexes[0],indexes[1]);
+        if(answer !== ""){
+            var getedId = '#' +answer[0] + '-' + answer[1];
+            $(getedId).addClass(deserve());
+        } else currValue *= -1;
+        cell.children().addClass(deserve());
+        function deserve(){
+            currValue *= -1;
+            if (currValue === 1) {
+                return "boardCellCross";
+            }
+            return "boardCellCircle";
+        }
+        if (logic.winState !== ""){
+            var message = $("#message");
+            message.text(logic.winState);
+            gameOver = true;
+            message.removeClass("looseState");
+            if (logic.winState === "you lost"){
+                message.addClass("looseState");
+            }
+        }
+    }
+  
+    $("#scale-Up").click(handleScale);
+    $("#scale-Down").click(handleScale);
+    function handleScale(e){
+        var value = 100;
+        var minValue = 300;
+        var delta =  $(this).attr('id').split("-")[1];
+        var board = $(".board");
+        var controls = $(".controls");
+        if (delta === "Up"){
+            board.width(board.width() + value);
+            board.height(board.height() + value);
+            controls.width(controls.width() + value);
+            controls.height(controls.height() + value/15);
+        }
+        if (delta === "Down" && board.width() > minValue){
+            board.width(board.width() - value);
+            board.height(board.height() - value);
+            controls.width(controls.width() - value);
+            controls.height(controls.height() - value/15);
+        }
+    }
+  
+    $("#new-O").parent().click(handleNewGame);
+    $("#new-X").parent().click(handleNewGame);
+    function handleNewGame(e){
+        var index = ($(this).children().attr('id')).split("-")[1];
+        $(".boardCell").removeClass("boardCellCross boardCellCircle");
+        gameOver = false;
+        $("#message").text("");
+        if (index === "O"){
+            logic = new Logic();
             $("#7-7").addClass("boardCellCross");
-            var o = -1,
-                f = !1;
-            $("div.boardCol").mousedown(e), $("#scale-Up").click(t), $("#scale-Down").click(t), $("#new-O").parent().click(n), $("#new-X").parent().click(n)
-        })
-    }, {
-        "./gomoku/logic": 2
-    }]
-}, {}, [3]);
+            currValue = -1;
+        }
+        if (index === "X"){
+            logic = new Logic(1);
+            currValue = 1;
+        }
+        $("#check").prop('checked', false);
+    }
+});

@@ -3,13 +3,9 @@ import { nanoid } from 'nanoid';
 import { useEffect, useRef } from 'react';
 
 function App() {
-    console.log('outside')
-
     const body = useRef(document.body)
 
     useEffect(() => {
-        console.log('inside')
-
         const scriptTag = document.createElement('script')
         const jqueryTag = document.createElement('script')
         jqueryTag.src = 'game_engine/jquery.js'
