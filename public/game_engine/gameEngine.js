@@ -362,13 +362,16 @@ var Logic = function(player) {
 MAIN
 
 */
+var ready = (callback) => {
+    if (document.readyState != "loading") callback();
+    else document.addEventListener("DOMContentLoaded", callback);
+}
 
-
-$(document).ready(function(){
+ready(() => {
     var initLogic = new Logic();
     var logic = initLogic;
   
-    $("#7-7").addClass("boardCellCross");
+    document.getElementById("7-7").classList.add("boardCellCross");
     var currValue = -1; // player - O, computer - X
     var gameOver = false;
   
@@ -393,18 +396,18 @@ $(document).ready(function(){
             return "boardCellCircle";
         }
         if (logic.winState !== ""){
-            var message = $("#message");
-            message.text(logic.winState);
+            var message = document.getElementById("message");
+            message.textContent = logic.winState;
             gameOver = true;
-            message.removeClass("looseState");
+            message.classList.remove("looseState");
             if (logic.winState === "you lost"){
-                message.addClass("looseState");
+                message.classList.add("looseState");
             }
         }
     }
   
-    $("#scale-Up").click(handleScale);
-    $("#scale-Down").click(handleScale);
+    document.getElementById("scale-Up").addEventListener("click", handleScale);
+    document.getElementById("scale-Down").addEventListener("click", handleScale);
     function handleScale(e){
         var value = 100;
         var minValue = 300;
@@ -425,22 +428,22 @@ $(document).ready(function(){
         }
     }
   
-    $("#new-O").parent().click(handleNewGame);
-    $("#new-X").parent().click(handleNewGame);
+    document.getElementById("new-O").parentElement.addEventListener("click", handleNewGame);
+    document.getElementById("new-X").parentElement.addEventListener("click", handleNewGame);
     function handleNewGame(e){
         var index = ($(this).children().attr('id')).split("-")[1];
         $(".boardCell").removeClass("boardCellCross boardCellCircle");
         gameOver = false;
-        $("#message").text("");
+        document.getElementById("message").textContent = "";
         if (index === "O"){
             logic = new Logic();
-            $("#7-7").addClass("boardCellCross");
+            document.getElementById("7-7").classList.add("boardCellCross");
             currValue = -1;
         }
         if (index === "X"){
             logic = new Logic(1);
             currValue = 1;
         }
-        $("#check").prop('checked', false);
+        document.getElementById("check").checked = false;
     }
 });
