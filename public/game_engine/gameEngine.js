@@ -1,4 +1,4 @@
-/* 
+/*
 
 COMBINATIONS
 
@@ -28,7 +28,7 @@ var Combinations = function() {
         [-1, 1, 0, 1, 0, 1, -1], [-1, 0, 1, 1, 1, 0, -1],
         [-1, 1, 1, 0, 0, 1, -1], [-1, 1, 0, 0, 1, 1, -1]
     ];
-  
+
     (function() { //add same combinations for another player
         var allCombos = [win, unCovered4, unCovered3, unCovered2, covered4, covered3];
         for (var k = 0; k < allCombos.length; k++) {
@@ -44,50 +44,50 @@ var Combinations = function() {
             }
         }
     }());
-  
+
     var valueCombo = function(w, u2, u3, u4, c3, c4) {
         if (w > 0)            return 1000000000;
         if (u4 > 0)           return 100000000;
         if (c4 > 1)           return 10000000;
         if (u3 > 0 && c4 > 0) return 1000000;
         if (u3 > 1)           return 100000;
-  
+
         if (u3 == 1) {
             if (u2 == 3)        return 40000;
             if (u2 == 2)        return 38000;
             if (u2 == 1)        return 35000;
             return 3450;
         }
-  
+
         if (c4 == 1) {
             if (u2 == 3)        return 4500;
             if (u2 == 2)        return 4200;
             if (u2 == 1)        return 4100;
             return 4050;
         }
-    
+
         if (c3 == 1) {
             if (u2 == 3)        return 3400;
             if (u2 == 2)        return 3300;
             if (u2 == 1)        return 3100;
         }
-  
+
         if (c3 == 2) {
             if (u2 == 2)        return 3000;
             if (u2 == 1)        return 2900;
         }
-    
+
         if (c3 == 3) {
             if (u2 == 1)        return 2800;
         }
-    
+
         if (u2 == 4)          return 2700;
         if (u2 == 3)          return 2500;
         if (u2 == 2)          return 2000;
         if (u2 == 1)          return 1000;
         return 0;
     };
-  
+
     var findArray = function(arr, inArr){
         var fCount = arr.length;
         var sCount = inArr.length;
@@ -104,14 +104,14 @@ var Combinations = function() {
         }
         return false;
     };
-  
+
     var isAnyInArrays = function(combos, arr){
         for (var i = 0; i < combos.length; i++) {
             if (findArray(arr, combos[i])) return true;
         }
         return false;
     };
-  
+
     var combinations = {};
     combinations.winValue = 1000000000;
     combinations.valuePosition = function(arr1,  arr2,  arr3,  arr4){ // 4 directions
@@ -157,7 +157,7 @@ var Combinations = function() {
 
 
 /*
- 
+
 LOGIC
 
 */
@@ -175,9 +175,9 @@ Array.matrix = function(m,n,initial) {
     }
     return mat;
 };
-  
+
 var initCombinations = new Combinations();
-  
+
 var Logic = function(player) {
     var gameSize = 5; // 5 in line
     var ring = 1; // ring size around current cells
@@ -188,7 +188,7 @@ var Logic = function(player) {
     var maxPlayer = player || -1; // X = 1, O = -1
     var combinations = initCombinations;
     if (maxPlayer === -1) curState[7][7] = 1;
-  
+
     var checkWin = function() {
         for (var i = 0; i < cellsCount; i++) {
             for (var j = 0; j < cellsCount; j++) {
@@ -205,7 +205,7 @@ var Logic = function(player) {
             }
         }
     };
-  
+
     var miniMax = function minimax(node, depth, player, parent) {
         if (depth == 0) return heuristic(node, parent);
         var alpha = Number.MIN_VALUE;
@@ -215,7 +215,7 @@ var Logic = function(player) {
         }
         return alpha;
     };
-  
+
     var isAllSatisfy = function (candidates, pointX, pointY) {
         var counter = 0;
         for (var i = 0; i < candidates.length; i++) {
@@ -223,7 +223,7 @@ var Logic = function(player) {
         }
         return counter == candidates.length;
     };
-  
+
     var getChilds = function(parent, player) {
         var children = [];
         var candidates = [];
@@ -256,7 +256,7 @@ var Logic = function(player) {
         }
         return children;
     };
-  
+
     var getCombo = function(node, curPlayer, i, j, dx, dy) {
         var combo = [curPlayer];
         for (var m = 1; m < gameSize; m++) {
@@ -283,7 +283,7 @@ var Logic = function(player) {
         }
         return combo;
     };
-  
+
     var heuristic = function(newNode, oldNode) {
         for (var i = 0; i < cellsCount; i++) {
             for (var j = 0; j < cellsCount; j++) {
@@ -309,7 +309,7 @@ var Logic = function(player) {
         }
         return 0;
     };
-  
+
     var getLogic = {};
     getLogic.winState = "";
     getLogic.makeAnswer = function(x, y) {
@@ -357,7 +357,7 @@ var Logic = function(player) {
 
 
 
-/* 
+/*
 
 MAIN
 
@@ -370,11 +370,11 @@ var ready = (callback) => {
 ready(() => {
     var initLogic = new Logic();
     var logic = initLogic;
-  
+
     document.getElementById("7-7").classList.add("boardCellCross");
     var currValue = -1; // player - O, computer - X
     var gameOver = false;
-  
+
     document.querySelectorAll('div.boardCol').forEach(boardColumn => {
         boardColumn.addEventListener('mousedown', handleMouseDown);
     })
@@ -407,7 +407,7 @@ ready(() => {
             }
         }
     }
-  
+
     document.getElementById("scale-Up").addEventListener("click", handleScale);
     document.getElementById("scale-Down").addEventListener("click", handleScale);
     function handleScale(e){
@@ -429,11 +429,14 @@ ready(() => {
             controls.style.height = (controls.offsetHeight - value/15) + 'px';
         }
     }
-  
+
     document.getElementById("new-O").parentElement.addEventListener("click", handleNewGame);
     document.getElementById("new-X").parentElement.addEventListener("click", handleNewGame);
     function handleNewGame(e){
-        var index = ($(this).children().attr('id')).split("-")[1];
+        // var index = ($(this).children().attr('id')).split("-")[1];
+
+        var index =  e.target.id.split("-")[1];
+        console.log(index)
         document.querySelectorAll('.boardCell').forEach(cell => {
             cell.classList.remove('boardCellCross', 'boardCellCircle')
         })
