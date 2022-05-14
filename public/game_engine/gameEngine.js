@@ -430,13 +430,12 @@ ready(() => {
         }
     }
 
-    document.getElementById("new-O").parentElement.addEventListener("click", handleNewGame);
-    document.getElementById("new-X").parentElement.addEventListener("click", handleNewGame);
+    document.getElementById("new-O").addEventListener("click", handleNewGame);
+    document.getElementById("new-X").addEventListener("click", handleNewGame);
     function handleNewGame(e){
-        // var index = ($(this).children().attr('id')).split("-")[1];
-
+        e.stopPropagation()
         var index =  e.target.id.split("-")[1];
-        console.log(index)
+
         document.querySelectorAll('.boardCell').forEach(cell => {
             cell.classList.remove('boardCellCross', 'boardCellCircle')
         })
