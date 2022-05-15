@@ -408,8 +408,7 @@ ready(() => {
         }
     }
 
-    document.getElementById("scale-Up").addEventListener("click", handleScale);
-    document.getElementById("scale-Down").addEventListener("click", handleScale);
+    document.addEventListener('wheel', handleScale)
     function handleScale(e){
         var value = 100;
         var maxWidth = 700;
@@ -417,17 +416,13 @@ ready(() => {
         var delta =  e.target.id.split("-")[1];
         var board = document.querySelector(".board");
         var controls = document.querySelector(".controls");
-        if (delta === "Up" && board.offsetWidth < maxWidth){
+        if ((delta === "Up" || e.deltaY < 0) && board.offsetWidth < maxWidth){ // scroll mouse up
             board.style.width = (board.offsetWidth + value) + 'px';
             board.style.height = (board.offsetHeight + value) + 'px';
-            controls.style.width = (controls.offsetWidth + value) + 'px';
-            controls.style.height = (controls.offsetHeight + value/15) + 'px';
         }
-        if (delta === "Down" && board.offsetWidth > minValue){
+        if ((delta === "Down" | e.deltaY > 0) && board.offsetWidth > minValue){ // scroll mouse down
             board.style.width = (board.offsetWidth - value) + 'px';
             board.style.height = (board.offsetHeight - value) + 'px';
-            controls.style.width = (controls.offsetWidth - value) + 'px';
-            controls.style.height = (controls.offsetHeight - value/15) + 'px';
         }
     }
 
