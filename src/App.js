@@ -7,13 +7,10 @@ function App() {
 
     useEffect(() => {
         const scriptTag = document.createElement('script')
-        const jqueryTag = document.createElement('script')
-        jqueryTag.src = 'game_engine/jquery.js'
         scriptTag.src = 'game_engine/gameEngine.js'
-        body.current.appendChild(jqueryTag)
         setTimeout(() => {
             body.current.appendChild(scriptTag)
-        }, 1000)
+        }, 200)
     }, [])
 
     const boardElements  = [...Array(15).keys()].map(x => {
