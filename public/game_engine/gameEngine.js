@@ -412,11 +412,12 @@ ready(() => {
     document.getElementById("scale-Down").addEventListener("click", handleScale);
     function handleScale(e){
         var value = 100;
+        var maxWidth = 700;
         var minValue = 300;
         var delta =  e.target.id.split("-")[1];
         var board = document.querySelector(".board");
         var controls = document.querySelector(".controls");
-        if (delta === "Up"){
+        if (delta === "Up" && board.offsetWidth < maxWidth){
             board.style.width = (board.offsetWidth + value) + 'px';
             board.style.height = (board.offsetHeight + value) + 'px';
             controls.style.width = (controls.offsetWidth + value) + 'px';

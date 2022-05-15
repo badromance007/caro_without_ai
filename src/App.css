@@ -10,8 +10,8 @@ section {
 .board {
     margin: auto;
     margin-top: 10px;
-    width: 400px;
-    height: 400px;
+    width: 700px;
+    height: 700px;
 }
 .boardRow {
     width: 100%;
@@ -55,8 +55,8 @@ section {
     box-sizing: border-box;
 }
 .controls {
-    width: 400px;
-    height: 26.66667px;
+    width: 700px;
+    height: 46.66667px;
     margin: auto;
 }
 .newGameCtrl,
