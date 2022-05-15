@@ -380,16 +380,16 @@ ready(() => {
     })
     function handleMouseDown(e){
         if(gameOver) return "";
-        var cell = $(this);
-        if (cell.children().hasClass("boardCellCircle")) return "";
-        if (cell.children().hasClass("boardCellCross")) return "";
-        var indexes = (cell.children().attr('id')).split("-");
+        var cell = e.currentTarget;
+        if (cell.children[0].classList.contains("boardCellCircle")) return "";
+        if (cell.children[0].classList.contains("boardCellCross")) return "";
+        var indexes = cell.children[0].id.split("-");
         var answer = logic.makeAnswer(indexes[0],indexes[1]);
         if(answer !== ""){
             var getedId = answer[0] + '-' + answer[1];
             document.getElementById(getedId).classList.add(deserve());
         } else currValue *= -1;
-        cell.children().addClass(deserve());
+        cell.children[0].classList.add(deserve());
         function deserve(){
             currValue *= -1;
             if (currValue === 1) {
