@@ -162,19 +162,17 @@ LOGIC
 
 */
 
-
-
-Array.matrix = function(m,n,initial) {
-    var a, i, j, mat = [];
-    for (i = 0; i < m; i++) {
-        a = [];
-        for (j = 0; j < n; j++) {
-            a[j] = initial;
+function initBoard(rows, columns, initialValue) {
+    var boardArray = [];
+    for (let row = 0; row < rows; row++) {
+        let boardRow = [];
+        for (let column = 0; column < columns; column++) {
+            boardRow[column] = initialValue;
         }
-        mat[i] = a;
+        boardArray[row] = boardRow;
     }
-    return mat;
-};
+    return boardArray;
+}
 
 var initCombinations = new Combinations();
 
@@ -183,7 +181,7 @@ var Logic = function(player) {
     var ring = 1; // ring size around current cells
     var win = false;
     var cellsCount = 15;
-    var curState = Array.matrix(15, 15, 0);
+    var curState = initBoard(15, 15, 0);
     var complexity = 1;
     var maxPlayer = player || -1; // X = 1, O = -1
     var combinations = initCombinations;
@@ -245,7 +243,7 @@ var Logic = function(player) {
             }
         }
         for (var f = 0; f < candidates.length; f++) {
-            var tmp = Array.matrix(cellsCount, cellsCount, 0);
+            var tmp = initBoard(cellsCount, cellsCount, 0);
             for (var m = 0; m < cellsCount; m++) {
                 for (var n = 0; n < cellsCount; n++) {
                     tmp[m][n] = parent[m][n];
