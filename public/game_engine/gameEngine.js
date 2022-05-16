@@ -370,7 +370,7 @@ ready(() => {
     var logic = initLogic;
 
     document.getElementById("7-7").classList.add("boardCellCross");
-    var currValue = -1; // player - O, computer - X
+    var currentSide = -1; // player - O (-1), computer - X (1)
     var gameOver = false;
 
     document.querySelectorAll('div.boardCol').forEach(boardColumn => {
@@ -385,12 +385,12 @@ ready(() => {
         var answer = logic.makeAnswer(indexes[0],indexes[1]);
         if(answer !== ""){
             var getedId = answer[0] + '-' + answer[1];
-            document.getElementById(getedId).classList.add(deserve());
-        } else currValue *= -1;
-        cell.children[0].classList.add(deserve());
-        function deserve(){
-            currValue *= -1;
-            if (currValue === 1) {
+            document.getElementById(getedId).classList.add(makeMove());
+        } else currentSide *= -1;
+        cell.children[0].classList.add(makeMove());
+        function makeMove(){
+            currentSide *= -1;
+            if (currentSide === 1) {
                 return "boardCellCross";
             }
             return "boardCellCircle";
@@ -437,11 +437,11 @@ ready(() => {
         if (index === "O"){
             logic = new Logic();
             document.getElementById("7-7").classList.add("boardCellCross");
-            currValue = -1;
+            currentSide = -1;
         }
         if (index === "X"){
             logic = new Logic(1);
-            currValue = 1;
+            currentSide = 1;
         }
         document.getElementById("check").checked = false;
     }
