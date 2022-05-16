@@ -415,7 +415,6 @@ ready(() => {
         var minValue = 300;
         var delta =  e.target.id.split("-")[1];
         var board = document.querySelector(".board");
-        var controls = document.querySelector(".controls");
         if ((delta === "Up" || e.deltaY < 0) && board.offsetWidth < maxWidth){ // scroll mouse up
             board.style.width = (board.offsetWidth + value) + 'px';
             board.style.height = (board.offsetHeight + value) + 'px';
