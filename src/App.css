@@ -151,3 +151,10 @@ section {
 #check:checked ~ .newMain + .newContainer .newPlate:nth-of-type(2) {
     left: 200%;
 }
+
+.messagesContainer {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-left: 100px;
+}

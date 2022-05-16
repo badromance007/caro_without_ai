@@ -42,16 +42,7 @@ function App() {
                         </div>
                     </div>
                 </div>
-                <div className="sizeCtrl">
-                    <div className="newMain">
-                        <div className="newMainText" id="scale-Up">+</div>
-                    </div>
-                </div>
-                <div className="sizeCtrl">
-                    <div className="newMain">
-                        <div className="newMainText" id="scale-Down">-</div>
-                    </div>
-                </div>
+
                 <div className="messages">
                     <div className="messagesContainer">
                         <div className="newMainText" id="message">try to get 5 in a row!</div>

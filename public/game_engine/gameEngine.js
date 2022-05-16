@@ -413,13 +413,12 @@ ready(() => {
         var value = 100;
         var maxWidth = 700;
         var minValue = 300;
-        var delta =  e.target.id.split("-")[1];
         var board = document.querySelector(".board");
-        if ((delta === "Up" || e.deltaY < 0) && board.offsetWidth < maxWidth){ // scroll mouse up
+        if ((e.deltaY < 0) && board.offsetWidth < maxWidth){ // scroll mouse up
             board.style.width = (board.offsetWidth + value) + 'px';
             board.style.height = (board.offsetHeight + value) + 'px';
         }
-        if ((delta === "Down" | e.deltaY > 0) && board.offsetWidth > minValue){ // scroll mouse down
+        if ((e.deltaY > 0) && board.offsetWidth > minValue){ // scroll mouse down
             board.style.width = (board.offsetWidth - value) + 'px';
             board.style.height = (board.offsetHeight - value) + 'px';
         }
