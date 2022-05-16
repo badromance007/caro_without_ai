@@ -385,10 +385,10 @@ ready(() => {
         var answer = logic.makeAnswer(indexes[0],indexes[1]);
         if(answer !== ""){
             var getedId = answer[0] + '-' + answer[1];
-            document.getElementById(getedId).classList.add(makeMove());
+            document.getElementById(getedId).classList.add(getMoveClass());
         } else currentSide *= -1;
-        cell.children[0].classList.add(makeMove());
-        function makeMove(){
+        cell.children[0].classList.add(getMoveClass());
+        function getMoveClass(){
             currentSide *= -1; // flip side
             if (currentSide === 1) {
                 return "boardCellCross";
