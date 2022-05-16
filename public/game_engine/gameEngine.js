@@ -398,10 +398,10 @@ ready(() => {
             return "boardCellCircle";
         }
         if (logic.winState !== ""){
-            var message = document.getElementById("message");
+            let message = document.getElementById("message");
             message.textContent = logic.winState;
             gameOver = true;
-            message.classList.remove("looseState");
+
             if (logic.winState === "you lost"){
                 message.classList.add("looseState");
             }
@@ -434,6 +434,7 @@ ready(() => {
             cell.classList.remove('boardCellCross', 'boardCellCircle')
         })
         gameOver = false;
+        document.getElementById("message").classList.remove("looseState");
         document.getElementById("message").textContent = "";
         if (index === "O"){
             logic = new Logic();
