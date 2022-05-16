@@ -252,6 +252,12 @@ ready(() => {
     var currentSide = 1; // player - O (-1), computer - X (1)
     var gameOver = false;
 
+    if (currentSide == 1) {
+        document.getElementById("message").textContent = "X turn";
+    } else {
+        document.getElementById("message").textContent = "O turn";
+    }
+
     document.querySelectorAll('div.boardCol').forEach(boardColumn => {
         boardColumn.addEventListener('mousedown', handleMouseDown);
     })
@@ -263,7 +269,14 @@ ready(() => {
         var indexes = cell.children[0].id.split("-");
         logic.makeMove(indexes[0],indexes[1], currentSide);
         cell.children[0].classList.add(getMoveClass());
+
         currentSide *= -1; // flip side
+        if (currentSide == 1) {
+            document.getElementById("message").textContent = "X turn";
+        } else {
+            document.getElementById("message").textContent = "O turn";
+        }
+
         function getMoveClass(){
             if (currentSide === 1) {
                 return "boardCellCross";
