@@ -190,16 +190,16 @@ var Logic = function(player) {
     var checkWin = function() {
         for (var i = 0; i < cellsCount; i++) {
             for (var j = 0; j < cellsCount; j++) {
-            if (curState[i][j] == 0) continue;
-            var playerVal = combinations.valuePosition(
-                getCombo(curState, curState[i][j], i, j, 1, 0),
-                getCombo(curState, curState[i][j], i, j, 0, 1),
-                getCombo(curState, curState[i][j], i, j, 1, 1),
-                getCombo(curState, curState[i][j], i, j, 1, -1)
-            );
-            if (playerVal === combinations.winValue) {
-                win = true;
-            }
+                if (curState[i][j] == 0) continue;
+                var playerVal = combinations.valuePosition(
+                    getCombo(curState, curState[i][j], i, j, 1, 0),
+                    getCombo(curState, curState[i][j], i, j, 0, 1),
+                    getCombo(curState, curState[i][j], i, j, 1, 1),
+                    getCombo(curState, curState[i][j], i, j, 1, -1)
+                );
+                if (playerVal === combinations.winValue) {
+                    win = true;
+                }
             }
         }
     };
@@ -389,7 +389,7 @@ ready(() => {
         } else currentSide *= -1;
         cell.children[0].classList.add(makeMove());
         function makeMove(){
-            currentSide *= -1;
+            currentSide *= -1; // flip side
             if (currentSide === 1) {
                 return "boardCellCross";
             }
