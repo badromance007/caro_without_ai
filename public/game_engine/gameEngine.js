@@ -94,24 +94,24 @@ var Logic = function(player) {
         }
     };
 
-    var getCombo = function(node, curPlayer, i, j, dx, dy) {
+    var getCombo = function(board, curPlayer, row, column, dx, dy) {
         var combo = [curPlayer];
         for (var m = 1; m < gameSize; m++) {
-            var nextX1 = i - dx * m;
-            var nextY1 = j - dy * m;
+            var nextX1 = row - dx * m;
+            var nextY1 = column - dy * m;
             if (nextX1 >= cellsCount || nextY1 >= cellsCount || nextX1 < 0 || nextY1 < 0) break;
-            var next1 = node[nextX1][nextY1];
-            if (node[nextX1][nextY1] == -curPlayer) {
+            var next1 = board[nextX1][nextY1];
+            if (board[nextX1][nextY1] == -curPlayer) {
                 combo.unshift(next1);
                 break;
             }
             combo.unshift(next1);
         }
         for (var k = 1; k < gameSize; k++) {
-            var nextX = i + dx * k;
-            var nextY = j + dy * k;
+            var nextX = row + dx * k;
+            var nextY = column + dy * k;
             if (nextX >= cellsCount || nextY >= cellsCount || nextX < 0 || nextY < 0) break;
-            var next = node[nextX][nextY];
+            var next = board[nextX][nextY];
             if (next == -curPlayer) {
                 combo.push(next);
                 break;
