@@ -4,31 +4,21 @@ COMBINATIONS
 
 */
 var Combinations = function() {
-    var win = [
-        [1, 1, 1, 1, 1], // X win
-        [-1, -1, -1, -1, -1] // O win
+    const X = 1;
+    const O = -1;
+    const WIN = [
+        X, // X win
+        O // O win
     ];
 
-    var findArray = function(arr, inArr){
-        var fCount = arr.length;
-        var sCount = inArr.length;
-        var k;
-        for (var i = 0; i <= fCount - sCount; i++)
-        {
-            k = 0;
-            for (var j = 0; j < sCount; j++)
-            {
-                if (arr[i + j] == inArr[j]) k++;
-                else break;
+    var isThisDirectionWin = function(winArray, directionArray){
+        if (directionArray.length === 5) {
+            for (var i = 0; i < winArray.length; i++) {
+                let isWin = directionArray.every(function(value) {
+                    return value === winArray[i]
+                })
+                if (isWin) return true;
             }
-            if (k == sCount) return true;
-        }
-        return false;
-    };
-
-    var isAnyInArrays = function(combos, arr){
-        for (var i = 0; i < combos.length; i++) {
-            if (findArray(arr, combos[i])) return true;
         }
         return false;
     };
@@ -38,7 +28,7 @@ var Combinations = function() {
         var w = 0;
         var allDirections = [verticalLineArray, horizontalLineArray, backwardDiagonalLineArray, forwardDiagonalLineArray];
         for (let direction = 0; direction < allDirections.length; direction++) {
-            if (isAnyInArrays(win, allDirections[direction])) {
+            if (isThisDirectionWin(WIN, allDirections[direction])) {
                 w = 1;
                 break;
             }
