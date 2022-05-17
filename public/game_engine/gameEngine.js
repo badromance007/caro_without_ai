@@ -96,16 +96,16 @@ var Logic = function(player) {
     var combinations = initCombinations;
 
     var checkWin = function() {
-        for (var i = 0; i < cellsCount; i++) {
-            for (var j = 0; j < cellsCount; j++) {
-                if (board[i][j] == 0) continue;
-                var playerVal = combinations.valuePosition(
-                    getCombo(board, board[i][j], i, j, 1, 0),
-                    getCombo(board, board[i][j], i, j, 0, 1),
-                    getCombo(board, board[i][j], i, j, 1, 1),
-                    getCombo(board, board[i][j], i, j, 1, -1)
+        for (let row = 0; row < cellsCount; row++) {
+            for (let column = 0; column < cellsCount; column++) {
+                if (board[row][column] == 0) continue;
+                let playerValue = combinations.valuePosition(
+                    getCombo(board, board[row][column], row, column, 1, 0),
+                    getCombo(board, board[row][column], row, column, 0, 1),
+                    getCombo(board, board[row][column], row, column, 1, 1),
+                    getCombo(board, board[row][column], row, column, 1, -1)
                 );
-                if (playerVal === combinations.winValue) {
+                if (playerValue === combinations.winValue) {
                     win = true;
                 }
             }
@@ -141,10 +141,10 @@ var Logic = function(player) {
 
     var getLogic = {};
     getLogic.winState = "";
-    getLogic.makeMove = function(x, y, player) {
+    getLogic.makeMove = function(row, column, player) {
         var that = this;
         maxPlayer = player
-        board[x][y] = maxPlayer;
+        board[row][column] = maxPlayer;
         checkWin();
         if (win){
             that.winState = `${maxPlayer == 1 ? 'X' : 'O'} win`;
