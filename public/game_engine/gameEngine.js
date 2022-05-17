@@ -41,7 +41,7 @@ var Combinations = function() {
     var combinations = {};
     combinations.winValue = 1000000000;
     combinations.valuePosition = function(arr1,  arr2,  arr3,  arr4){ // 4 directions
-        var w = 0, u2 = 0, u3 = 0, u4 = 0, c3 = 0, c4 = 0;
+        var w = 0;
         var allArr = [arr1,  arr2,  arr3,  arr4];
         for (var i = 0; i < allArr.length; i++) {
             if (isAnyInArrays(win, allArr[i])) {
