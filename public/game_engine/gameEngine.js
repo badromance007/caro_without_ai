@@ -4,22 +4,10 @@ COMBINATIONS
 
 */
 var Combinations = function() {
-    var win = [[1, 1, 1, 1, 1]];
-    (function() { //add same combinations for another player
-        var allCombos = [win];
-        for (var k = 0; k < allCombos.length; k++) {
-            var temp = [];
-            for (var j = 0; j < allCombos[k].length; j++) {
-                var tmp = [];
-                for (var i = 0; i < allCombos[k][j].length; i++)
-                    tmp[i] = -allCombos[k][j][i];
-                temp.push(tmp);
-            }
-            for (var m = 0; m < temp.length; m++) {
-                allCombos[k].push(temp[m]);
-            }
-        }
-    }());
+    var win = [
+        [1, 1, 1, 1, 1], // X win
+        [-1, -1, -1, -1, -1] // O win
+    ];
 
     var valueCombo = function(w) {
         if (w > 0)            return 1000000000;
