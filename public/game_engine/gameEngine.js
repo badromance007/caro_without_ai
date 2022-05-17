@@ -34,11 +34,11 @@ var Combinations = function() {
     };
 
     var combinations = {};
-    combinations.valuePosition = function(verticalLineArray,  horizontalLineArray,  backwardDiagonalLineArray,  forwardDiagonalLineArray){ // 4 directions
+    combinations.valuePosition = function(verticalLineArray, horizontalLineArray, backwardDiagonalLineArray, forwardDiagonalLineArray){ // 4 directions
         var w = 0;
-        var allDirections = [verticalLineArray,  horizontalLineArray,  backwardDiagonalLineArray,  forwardDiagonalLineArray];
-        for (var i = 0; i < allDirections.length; i++) {
-            if (isAnyInArrays(win, allDirections[i])) {
+        var allDirections = [verticalLineArray, horizontalLineArray, backwardDiagonalLineArray, forwardDiagonalLineArray];
+        for (let direction = 0; direction < allDirections.length; direction++) {
+            if (isAnyInArrays(win, allDirections[direction])) {
                 w = 1;
                 break;
             }
