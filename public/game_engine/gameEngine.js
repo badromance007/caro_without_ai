@@ -9,11 +9,6 @@ var Combinations = function() {
         [-1, -1, -1, -1, -1] // O win
     ];
 
-    var valueCombo = function(w) {
-        if (w > 0)            return 1000000000;
-        return 0;
-    };
-
     var findArray = function(arr, inArr){
         var fCount = arr.length;
         var sCount = inArr.length;
@@ -39,17 +34,16 @@ var Combinations = function() {
     };
 
     var combinations = {};
-    combinations.winValue = 1000000000;
     combinations.valuePosition = function(arr1,  arr2,  arr3,  arr4){ // 4 directions
         var w = 0;
         var allArr = [arr1,  arr2,  arr3,  arr4];
         for (var i = 0; i < allArr.length; i++) {
             if (isAnyInArrays(win, allArr[i])) {
-                w++;
-                continue;
+                w = 1;
+                break;
             }
         }
-        return valueCombo(w);
+        return w;
     };
     return combinations;
 };
@@ -93,7 +87,7 @@ var Logic = function(player) {
                     getCombo(board, board[row][column], row, column, 1, 1),
                     getCombo(board, board[row][column], row, column, 1, -1)
                 );
-                if (playerValue === combinations.winValue) {
+                if (playerValue === 1) {
                     win = true;
                 }
             }
