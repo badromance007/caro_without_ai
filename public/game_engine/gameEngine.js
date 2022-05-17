@@ -100,23 +100,15 @@ var Logic = function(player) {
             var nextX1 = row - dx * m;
             var nextY1 = column - dy * m;
             if (nextX1 >= cellsCount || nextY1 >= cellsCount || nextX1 < 0 || nextY1 < 0) break;
-            var next1 = board[nextX1][nextY1];
-            if (board[nextX1][nextY1] == -curPlayer) {
-                combo.unshift(next1);
-                break;
-            }
-            combo.unshift(next1);
+            combo.unshift(board[nextX1][nextY1]);
+            if (board[nextX1][nextY1] == -curPlayer) break;
         }
         for (var k = 1; k < gameSize; k++) {
             var nextX = row + dx * k;
             var nextY = column + dy * k;
             if (nextX >= cellsCount || nextY >= cellsCount || nextX < 0 || nextY < 0) break;
-            var next = board[nextX][nextY];
-            if (next == -curPlayer) {
-                combo.push(next);
-                break;
-            }
-            combo.push(next);
+            combo.push(board[nextX][nextY]);
+            if (board[nextX][nextY] == -curPlayer) break;
         }
         return combo;
     };
