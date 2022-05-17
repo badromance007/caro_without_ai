@@ -4,21 +4,27 @@ COMBINATIONS
 
 */
 var Combinations = function() {
-    const X = 1;
-    const O = -1;
     const WIN = [
-        X, // X win
-        O // O win
+        [1, 1, 1, 1, 1], // X win
+        [-1, -1, -1, -1, -1] // O win
     ];
 
-    var isThisDirectionWin = function(winArray, directionArray){
-        if (directionArray.length === 5) {
-            for (var i = 0; i < winArray.length; i++) {
-                let isWin = directionArray.every(function(value) {
-                    return value === winArray[i]
-                })
-                if (isWin) return true;
+    function findChildArrayInParentArray(parentArray, childArray) {
+        let count;
+        for (let i = 0; i <= parentArray.length - childArray.length; i++) {
+            count = 0;
+            for (let j = 0; j < childArray.length; j++) {
+                if (parentArray[i + j] == childArray[j]) count++;
+                else break;
             }
+            if (count == childArray.length) return true;
+        }
+        return false;
+    }
+
+    var isThisDirectionWin = function(winArray, directionArray){
+        for (var i = 0; i < winArray.length; i++) {
+            if (findChildArrayInParentArray(directionArray, winArray[i])) return true;
         }
         return false;
     };
@@ -88,18 +94,14 @@ var Logic = function(player) {
             let upRow = row - dx * up;
             let upColumn = column - dy * up;
             if (upRow >= cellsCount || upColumn >= cellsCount || upRow < 0 || upColumn < 0) break;
-            if (board[upRow][upColumn] == currentPostion) {
-                lineArray.unshift(board[upRow][upColumn]);
-            }
+            lineArray.unshift(board[upRow][upColumn]);
             if (board[upRow][upColumn] == -currentPostion) break;
         }
         for (let down = 1; down < gameSize; down++) { // check downward
             let downRow = row + dx * down;
             let downColumn = column + dy * down;
             if (downRow >= cellsCount || downColumn >= cellsCount || downRow < 0 || downColumn < 0) break;
-            if (board[downRow][downColumn] == currentPostion) {
-                lineArray.push(board[downRow][downColumn]);
-            }
+            lineArray.push(board[downRow][downColumn]);
             if (board[downRow][downColumn] == -currentPostion) break;
         }
         return lineArray;
