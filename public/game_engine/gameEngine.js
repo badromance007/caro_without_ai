@@ -34,11 +34,11 @@ var Combinations = function() {
     };
 
     var combinations = {};
-    combinations.valuePosition = function(arr1,  arr2,  arr3,  arr4){ // 4 directions
+    combinations.valuePosition = function(verticalLineArray,  horizontalLineArray,  backwardDiagonalLineArray,  forwardDiagonalLineArray){ // 4 directions
         var w = 0;
-        var allArr = [arr1,  arr2,  arr3,  arr4];
-        for (var i = 0; i < allArr.length; i++) {
-            if (isAnyInArrays(win, allArr[i])) {
+        var allDirections = [verticalLineArray,  horizontalLineArray,  backwardDiagonalLineArray,  forwardDiagonalLineArray];
+        for (var i = 0; i < allDirections.length; i++) {
+            if (isAnyInArrays(win, allDirections[i])) {
                 w = 1;
                 break;
             }
@@ -84,8 +84,8 @@ var Logic = function(player) {
                 let playerValue = combinations.valuePosition(
                     getCombo(board, board[row][column], row, column, 1, 0), // vertical line
                     getCombo(board, board[row][column], row, column, 0, 1), // horizontal line
-                    getCombo(board, board[row][column], row, column, 1, 1), // \ diagonal line
-                    getCombo(board, board[row][column], row, column, 1, -1) // / diagonal line
+                    getCombo(board, board[row][column], row, column, 1, 1), // \ (backward) diagonal line
+                    getCombo(board, board[row][column], row, column, 1, -1) // / (forward) diagonal line
                 );
                 if (playerValue === 1) {
                     win = true;
