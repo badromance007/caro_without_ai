@@ -94,23 +94,23 @@ var Logic = function(player) {
         }
     };
 
-    var getLineArray = function(board, curPlayer, row, column, dx, dy) {
-        var combo = [curPlayer];
-        for (var m = 1; m < gameSize; m++) {
-            var nextX1 = row - dx * m;
-            var nextY1 = column - dy * m;
-            if (nextX1 >= cellsCount || nextY1 >= cellsCount || nextX1 < 0 || nextY1 < 0) break;
-            combo.unshift(board[nextX1][nextY1]);
-            if (board[nextX1][nextY1] == -curPlayer) break;
+    var getLineArray = function(board, currentPostion, row, column, dx, dy) {
+        var lineArray = [currentPostion];
+        for (let up = 1; up< gameSize; up++) { // check upward
+            let upRow = row - dx * up;
+            let upColumn = column - dy * up;
+            if (upRow >= cellsCount || upColumn >= cellsCount || upRow < 0 || upColumn < 0) break;
+            lineArray.unshift(board[upRow][upColumn]);
+            if (board[upRow][upColumn] == -currentPostion) break;
         }
-        for (var k = 1; k < gameSize; k++) {
-            var nextX = row + dx * k;
-            var nextY = column + dy * k;
-            if (nextX >= cellsCount || nextY >= cellsCount || nextX < 0 || nextY < 0) break;
-            combo.push(board[nextX][nextY]);
-            if (board[nextX][nextY] == -curPlayer) break;
+        for (let down = 1; down < gameSize; down++) { // check downward
+            let downRow = row + dx * down;
+            let downColumn = column + dy * down;
+            if (downRow >= cellsCount || downColumn >= cellsCount || downRow < 0 || downColumn < 0) break;
+            lineArray.push(board[downRow][downColumn]);
+            if (board[downRow][downColumn] == -currentPostion) break;
         }
-        return combo;
+        return lineArray;
     };
 
     var getLogic = {};
