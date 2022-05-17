@@ -82,10 +82,10 @@ var Logic = function(player) {
             for (let column = 0; column < cellsCount; column++) {
                 if (board[row][column] == 0) continue;
                 let playerValue = combinations.valuePosition(
-                    getCombo(board, board[row][column], row, column, 1, 0),
-                    getCombo(board, board[row][column], row, column, 0, 1),
-                    getCombo(board, board[row][column], row, column, 1, 1),
-                    getCombo(board, board[row][column], row, column, 1, -1)
+                    getCombo(board, board[row][column], row, column, 1, 0), // vertical line
+                    getCombo(board, board[row][column], row, column, 0, 1), // horizontal line
+                    getCombo(board, board[row][column], row, column, 1, 1), // \ diagonal line
+                    getCombo(board, board[row][column], row, column, 1, -1) // / diagonal line
                 );
                 if (playerValue === 1) {
                     win = true;
