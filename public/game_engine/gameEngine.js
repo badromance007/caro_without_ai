@@ -91,19 +91,19 @@ var Logic = function(player) {
     var gameSize = 5; // 5 in line
     var win = false;
     var cellsCount = 15;
-    var curState = initBoard(15, 15, 0);
+    var board = initBoard(15, 15, 0);
     var maxPlayer = player || -1; // X = 1, O = -1
     var combinations = initCombinations;
 
     var checkWin = function() {
         for (var i = 0; i < cellsCount; i++) {
             for (var j = 0; j < cellsCount; j++) {
-                if (curState[i][j] == 0) continue;
+                if (board[i][j] == 0) continue;
                 var playerVal = combinations.valuePosition(
-                    getCombo(curState, curState[i][j], i, j, 1, 0),
-                    getCombo(curState, curState[i][j], i, j, 0, 1),
-                    getCombo(curState, curState[i][j], i, j, 1, 1),
-                    getCombo(curState, curState[i][j], i, j, 1, -1)
+                    getCombo(board, board[i][j], i, j, 1, 0),
+                    getCombo(board, board[i][j], i, j, 0, 1),
+                    getCombo(board, board[i][j], i, j, 1, 1),
+                    getCombo(board, board[i][j], i, j, 1, -1)
                 );
                 if (playerVal === combinations.winValue) {
                     win = true;
@@ -144,7 +144,7 @@ var Logic = function(player) {
     getLogic.makeMove = function(x, y, player) {
         var that = this;
         maxPlayer = player
-        curState[x][y] = maxPlayer;
+        board[x][y] = maxPlayer;
         checkWin();
         if (win){
             that.winState = `${maxPlayer == 1 ? 'X' : 'O'} win`;
