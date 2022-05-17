@@ -24,16 +24,16 @@ var Combinations = function() {
     };
 
     var combinations = {};
-    combinations.valuePosition = function(verticalLineArray, horizontalLineArray, backwardDiagonalLineArray, forwardDiagonalLineArray){ // 4 directions
-        var w = 0;
+    combinations.evaluateWinDirection = function(verticalLineArray, horizontalLineArray, backwardDiagonalLineArray, forwardDiagonalLineArray){ // 4 directions
+        let winExist = false;
         var allDirections = [verticalLineArray, horizontalLineArray, backwardDiagonalLineArray, forwardDiagonalLineArray];
         for (let direction = 0; direction < allDirections.length; direction++) {
             if (isThisDirectionWin(WIN, allDirections[direction])) {
-                w = 1;
+                winExist = true;
                 break;
             }
         }
-        return w;
+        return winExist;
     };
     return combinations;
 };
@@ -71,15 +71,13 @@ var Logic = function(player) {
         for (let row = 0; row < cellsCount; row++) {
             for (let column = 0; column < cellsCount; column++) {
                 if (board[row][column] == 0) continue;
-                let playerValue = combinations.valuePosition(
+                let winExist = combinations.evaluateWinDirection(
                     getLineArray(board, board[row][column], row, column, 1, 0), // vertical line
                     getLineArray(board, board[row][column], row, column, 0, 1), // horizontal line
                     getLineArray(board, board[row][column], row, column, 1, 1), // \ (backward) diagonal line
                     getLineArray(board, board[row][column], row, column, 1, -1) // / (forward) diagonal line
                 );
-                if (playerValue === 1) {
-                    win = true;
-                }
+                if (winExist) win = true;
             }
         }
     };
