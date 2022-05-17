@@ -1,9 +1,27 @@
 /*
 
-COMBINATIONS
+LOGIC
 
 */
-var Combinations = function() {
+
+function initBoard(rows, columns, initialValue) {
+    var boardArray = [];
+    for (let row = 0; row < rows; row++) {
+        let boardRow = [];
+        for (let column = 0; column < columns; column++) {
+            boardRow[column] = initialValue;
+        }
+        boardArray[row] = boardRow;
+    }
+    return boardArray;
+}
+
+var Logic = function(player) {
+    var gameSize = 5; // 5 in line
+    var win = false;
+    var cellsCount = 15;
+    var board = initBoard(15, 15, 0);
+    var maxPlayer = player || -1; // X = 1, O = -1
     const WIN = [
         [1, 1, 1, 1, 1], // X win
         [-1, -1, -1, -1, -1] // O win
@@ -22,17 +40,16 @@ var Combinations = function() {
         return false;
     }
 
-    var isThisDirectionWin = function(winArray, directionArray){
-        for (var i = 0; i < winArray.length; i++) {
+    function isThisDirectionWin(winArray, directionArray){
+        for (let i = 0; i < winArray.length; i++) {
             if (findChildArrayInParentArray(directionArray, winArray[i])) return true;
         }
         return false;
     };
 
-    var combinations = {};
-    combinations.evaluateWinDirection = function(verticalLineArray, horizontalLineArray, backwardDiagonalLineArray, forwardDiagonalLineArray){ // 4 directions
+    function evaluateWinDirection(verticalLineArray, horizontalLineArray, backwardDiagonalLineArray, forwardDiagonalLineArray){ // 4 directions
         let winExist = false;
-        var allDirections = [verticalLineArray, horizontalLineArray, backwardDiagonalLineArray, forwardDiagonalLineArray];
+        let allDirections = [verticalLineArray, horizontalLineArray, backwardDiagonalLineArray, forwardDiagonalLineArray];
         for (let direction = 0; direction < allDirections.length; direction++) {
             if (isThisDirectionWin(WIN, allDirections[direction])) {
                 winExist = true;
@@ -41,43 +58,13 @@ var Combinations = function() {
         }
         return winExist;
     };
-    return combinations;
-};
 
-
-/*
-
-LOGIC
-
-*/
-
-function initBoard(rows, columns, initialValue) {
-    var boardArray = [];
-    for (let row = 0; row < rows; row++) {
-        let boardRow = [];
-        for (let column = 0; column < columns; column++) {
-            boardRow[column] = initialValue;
-        }
-        boardArray[row] = boardRow;
-    }
-    return boardArray;
-}
-
-var initCombinations = new Combinations();
-
-var Logic = function(player) {
-    var gameSize = 5; // 5 in line
-    var win = false;
-    var cellsCount = 15;
-    var board = initBoard(15, 15, 0);
-    var maxPlayer = player || -1; // X = 1, O = -1
-    var combinations = initCombinations;
 
     var checkWin = function() {
         for (let row = 0; row < cellsCount; row++) {
             for (let column = 0; column < cellsCount; column++) {
                 if (board[row][column] == 0) continue;
-                let winExist = combinations.evaluateWinDirection(
+                let winExist = evaluateWinDirection(
                     getLineArray(board, board[row][column], row, column, 1, 0), // vertical line
                     getLineArray(board, board[row][column], row, column, 0, 1), // horizontal line
                     getLineArray(board, board[row][column], row, column, 1, 1), // \ (backward) diagonal line
