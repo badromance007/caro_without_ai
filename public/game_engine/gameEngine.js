@@ -100,14 +100,18 @@ var Logic = function(player) {
             let upRow = row - dx * up;
             let upColumn = column - dy * up;
             if (upRow >= cellsCount || upColumn >= cellsCount || upRow < 0 || upColumn < 0) break;
-            lineArray.unshift(board[upRow][upColumn]);
+            if (board[upRow][upColumn] == currentPostion) {
+                lineArray.unshift(board[upRow][upColumn]);
+            }
             if (board[upRow][upColumn] == -currentPostion) break;
         }
         for (let down = 1; down < gameSize; down++) { // check downward
             let downRow = row + dx * down;
             let downColumn = column + dy * down;
             if (downRow >= cellsCount || downColumn >= cellsCount || downRow < 0 || downColumn < 0) break;
-            lineArray.push(board[downRow][downColumn]);
+            if (board[downRow][downColumn] == currentPostion) {
+                lineArray.push(board[downRow][downColumn]);
+            }
             if (board[downRow][downColumn] == -currentPostion) break;
         }
         return lineArray;
