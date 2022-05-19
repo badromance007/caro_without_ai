@@ -46,7 +46,7 @@ var Logic = function() {
         for (let up = 1; up < cellsCount; up++) { // check upward
             let upRow = row - dx * up;
             let upColumn = column - dy * up;
-            if (upRow >= cellsCount || upColumn >= cellsCount || upRow < 0 || upColumn < 0) break;
+            if (upRow < 0 || upColumn < 0) break;
             if (board[upRow][upColumn] === currentPlayerPostion) {
                 lineArray.unshift(board[upRow][upColumn]);
             } else break;
@@ -54,7 +54,7 @@ var Logic = function() {
         for (let down = 1; down < cellsCount; down++) { // check downward
             let downRow = row + dx * down;
             let downColumn = column + dy * down;
-            if (downRow >= cellsCount || downColumn >= cellsCount || downRow < 0 || downColumn < 0) break;
+            if (downRow >= cellsCount || downColumn >= cellsCount) break;
             if (board[downRow][downColumn] === currentPlayerPostion) {
                 lineArray.push(board[downRow][downColumn]);
             } else break;
