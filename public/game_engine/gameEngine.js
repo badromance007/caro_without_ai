@@ -30,7 +30,6 @@ var Logic = function() {
             getLineArray(board, currentPlayerPostion, row, column, 1, 1), // \ (backward) diagonal line
             getLineArray(board, currentPlayerPostion, row, column, 1, -1) // / (forward) diagonal line
         ];
-        console.log(allDirections)
 
         for (let direction = 0; direction < allDirections.length; direction++) {
             if (allDirections[direction].length >= 5) {
