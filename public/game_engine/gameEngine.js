@@ -16,80 +16,49 @@ function initBoard(rows, columns, initialValue) {
     return boardArray;
 }
 
-var Logic = function(player) {
-    var gameSize = 5; // 5 in line
+var Logic = function() {
     var win = false;
     var cellsCount = 15;
     var board = initBoard(15, 15, 0);
-    var maxPlayer = player || -1; // X = 1, O = -1
-    const WIN = [
-        [1, 1, 1, 1, 1], // X win
-        [-1, -1, -1, -1, -1] // O win
-    ];
 
-    function findChildArrayInParentArray(parentArray, childArray) {
-        let count;
-        for (let i = 0; i <= parentArray.length - childArray.length; i++) {
-            count = 0;
-            for (let j = 0; j < childArray.length; j++) {
-                if (parentArray[i + j] == childArray[j]) count++;
-                else break;
-            }
-            if (count == childArray.length) return true;
-        }
-        return false;
-    }
-
-    function isThisDirectionWin(winArray, directionArray){
-        for (let i = 0; i < winArray.length; i++) {
-            if (findChildArrayInParentArray(directionArray, winArray[i])) return true;
-        }
-        return false;
-    };
-
-    function evaluateWinDirection(verticalLineArray, horizontalLineArray, backwardDiagonalLineArray, forwardDiagonalLineArray){ // 4 directions
+    var checkWin = function(row, column) {
+        let currentPlayerPostion = board[row][column];
         let winExist = false;
-        let allDirections = [verticalLineArray, horizontalLineArray, backwardDiagonalLineArray, forwardDiagonalLineArray];
+        let allDirections = [
+            getLineArray(board, currentPlayerPostion, row, column, 1, 0), // vertical line
+            getLineArray(board, currentPlayerPostion, row, column, 0, 1), // horizontal line
+            getLineArray(board, currentPlayerPostion, row, column, 1, 1), // \ (backward) diagonal line
+            getLineArray(board, currentPlayerPostion, row, column, 1, -1) // / (forward) diagonal line
+        ];
+        console.log(allDirections)
+
         for (let direction = 0; direction < allDirections.length; direction++) {
-            if (isThisDirectionWin(WIN, allDirections[direction])) {
+            if (allDirections[direction].length >= 5) {
                 winExist = true;
                 break;
             }
         }
-        return winExist;
+
+        if (winExist) win = true;
     };
 
-
-    var checkWin = function() {
-        for (let row = 0; row < cellsCount; row++) {
-            for (let column = 0; column < cellsCount; column++) {
-                if (board[row][column] == 0) continue;
-                let winExist = evaluateWinDirection(
-                    getLineArray(board, board[row][column], row, column, 1, 0), // vertical line
-                    getLineArray(board, board[row][column], row, column, 0, 1), // horizontal line
-                    getLineArray(board, board[row][column], row, column, 1, 1), // \ (backward) diagonal line
-                    getLineArray(board, board[row][column], row, column, 1, -1) // / (forward) diagonal line
-                );
-                if (winExist) win = true;
-            }
-        }
-    };
-
-    var getLineArray = function(board, currentPostion, row, column, dx, dy) {
-        var lineArray = [currentPostion];
-        for (let up = 1; up< gameSize; up++) { // check upward
+    var getLineArray = function(board, currentPlayerPostion, row, column, dx, dy) {
+        var lineArray = [currentPlayerPostion];
+        for (let up = 1; up < cellsCount; up++) { // check upward
             let upRow = row - dx * up;
             let upColumn = column - dy * up;
             if (upRow >= cellsCount || upColumn >= cellsCount || upRow < 0 || upColumn < 0) break;
-            lineArray.unshift(board[upRow][upColumn]);
-            if (board[upRow][upColumn] == -currentPostion) break;
+            if (board[upRow][upColumn] === currentPlayerPostion) {
+                lineArray.unshift(board[upRow][upColumn]);
+            } else break;
         }
-        for (let down = 1; down < gameSize; down++) { // check downward
+        for (let down = 1; down < cellsCount; down++) { // check downward
             let downRow = row + dx * down;
             let downColumn = column + dy * down;
             if (downRow >= cellsCount || downColumn >= cellsCount || downRow < 0 || downColumn < 0) break;
-            lineArray.push(board[downRow][downColumn]);
-            if (board[downRow][downColumn] == -currentPostion) break;
+            if (board[downRow][downColumn] === currentPlayerPostion) {
+                lineArray.push(board[downRow][downColumn]);
+            } else break;
         }
         return lineArray;
     };
@@ -98,11 +67,10 @@ var Logic = function(player) {
     getLogic.winState = "";
     getLogic.makeMove = function(row, column, player) {
         var that = this;
-        maxPlayer = player
-        board[row][column] = maxPlayer;
-        checkWin();
+        board[row][column] = player;
+        checkWin(row, column);
         if (win){
-            that.winState = `${maxPlayer == 1 ? 'X' : 'O'} win`;
+            that.winState = `${player == 1 ? 'X' : 'O'} win`;
         }
     };
     return getLogic;
@@ -141,7 +109,7 @@ ready(() => {
         if (cell.children[0].classList.contains("boardCellCircle")) return "";
         if (cell.children[0].classList.contains("boardCellCross")) return "";
         var indexes = cell.children[0].id.split("-");
-        logic.makeMove(indexes[0],indexes[1], currentSide);
+        logic.makeMove(parseInt(indexes[0]), parseInt(indexes[1]), currentSide);
         cell.children[0].classList.add(getMoveClass());
 
         currentSide *= -1; // flip side
@@ -202,7 +170,7 @@ ready(() => {
             document.getElementById("message").textContent = "O turn";
         }
         if (index === "X"){
-            logic = new Logic(1);
+            logic = new Logic();
             currentSide = 1;
             document.getElementById("message").textContent = "X turn";
         }
